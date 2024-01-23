@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main Chat Page</title>
+    <link href="../images/logo.jpg" rel="icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://kit-free.fontawesome.com/releases/latest/css/free.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+    <link rel="stylesheet" href="./chat.css">
+</head>
+<body>
+    <div class="message-container">
+        <div class="user-one">
+          <p>User One: Hello, how are you?</p>
+        </div>
+    
+        <div class="reply">
+          <p>Reply: Hi there! I'm doing well, thanks for asking.</p>
+        </div>
+    
+        <div class="user-one">
+          <p>User One: That's great to hear!</p>
+        </div>
+    
+        <div class="reply">
+          <p>Reply: Yes, it's been a good day so far.</p>
+        </div>
+      </div>
+    
+    
+            <div class=" fixed-bottom mb-5 mb-lg-1" style="position: absolute; bottom:0 ; width: 100%;">
+                <div class="container mt-4 mb-3 text-black">
+                    <form id="message_form">
+                        <div class="input-group align-items-center">
+                            <input type="text" class="form-control rounded-start-2" placeholder="Type your message..." name="Message"
+                               id="flexInput" required>
+                            <input type="submit" class="btn btn-primary"  value=&#10148; id="0">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        
+    
+</body>
+</html>
