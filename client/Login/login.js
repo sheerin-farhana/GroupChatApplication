@@ -43,6 +43,7 @@ loginBtn.addEventListener('click',async (e) => {
 
             if (userDetails.data.success) {
                 successalert(userDetails.data.message);
+                localStorage.setItem("token", userDetails.data.token);
             }
             else {
                 failurealert(userDetails.data.message);
