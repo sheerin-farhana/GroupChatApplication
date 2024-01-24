@@ -12,13 +12,27 @@ const postMessage =async (req, res, next) => {
             userId: userId
         });
 
-        res.status(200).json({ success: true, msg: "message added" });
+        res.status(200).json({ success: true, msg: "message added",message:message.Text });
             
     }
     catch (err) {
         console.log(err);
-        res.status(500).json * { success: false, msg: "Internal server error" };
+        res.status(500).json * { success: false, msg: "Internal server error", };
     }
 }
 
-module.exports = { postMessage };
+const getAllMessages = async (req, res, next) => {
+    const userId = req.user.id;
+
+    try {
+        const messages = await Message.findAll({ where: { userId: userId } });
+        
+        res.status(200).json({ success: true, msg: "Messages fetched" , messages:messages});
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, msg: "Internal server error" });
+    }
+}
+
+module.exports = { postMessage,getAllMessages };
