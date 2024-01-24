@@ -44,6 +44,7 @@ loginBtn.addEventListener('click',async (e) => {
             if (userDetails.data.success) {
                 successalert(userDetails.data.message);
                 localStorage.setItem("token", userDetails.data.token);
+                window.location.href = "../Chatpage/chat.html";
             }
             else {
                 failurealert(userDetails.data.message);

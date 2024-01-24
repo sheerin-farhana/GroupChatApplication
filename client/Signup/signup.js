@@ -44,7 +44,7 @@ signupBtn.addEventListener('click',async (e) => {
             }
             const users = await axios.post('http://localhost:3000/users/signup', userObject);
             successalert("signed up successfully");
-            
+            window.location.href = "../Login/login.html";
             
             console.log(users.data.data);
         }
