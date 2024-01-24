@@ -3,6 +3,7 @@ const sendMessageBtn = document.getElementById('send-message-btn');
 const messageInput = document.getElementById('message-text');
 const msgContainer = document.getElementById('user-message');
 const token = localStorage.getItem('token');
+let messagesArray;
 
 sendMessageBtn.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -19,7 +20,7 @@ sendMessageBtn.addEventListener('click', async (e) => {
         }
         );
         const message = sentMessage.data.message;
-        addMessageToUi(message);
+       
     }
     catch (err) {
         console.log(err);
@@ -29,23 +30,37 @@ sendMessageBtn.addEventListener('click', async (e) => {
     messageInput.value = "";
 
 });
-
 document.addEventListener("DOMContentLoaded", async (e) => {
+    // Assuming you have the token stored in localStorage
+    const token = localStorage.getItem('token');
     
-    const messages = await axios.get('http://localhost:3000/users/messages', {
-        headers: {
-            'Authorization': 'Bearer ' + token,
-        },
-    });
 
-    const messagesArray = messages.data.messages;
+    // Use setInterval, not setTimeInterval
+    setInterval(async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/users/messages', {
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                },
+            });
 
-    messagesArray.forEach(message => {
+            messagesArray = response.data.messages;
+            console.log(response.data.messages,"messages");
+            
+        } catch (error) {
+            console.error(error);
+        }
+    }, 0);
+
+    console.log(messagesArray);
+
+    messagesArray.messagesArray.forEach(message => {
         console.log(message);
         addMessageToUi(message.Text);
     });
-
+    
 });
+
 
 const addMessageToUi = (message) => {
 
