@@ -85,4 +85,14 @@ function isStringValid(data) {
     }
 }
 
-module.exports = { signup,login };
+const getAllUsers =async (req, res, next) => {
+    try {
+        const users = await User.findAll();
+        res.status(200).json({ success: true, msg: "users fetched", users: users });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, msg: "Internal server error" });
+    }
+}
+module.exports = { signup,login,getAllUsers };

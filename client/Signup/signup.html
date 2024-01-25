@@ -12,7 +12,37 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light navbar-light mb-1">
+        <div class="container">
+            <a class="navbar-brand" href="#"><img id="MDB-logo"
+                    src="https://www.clipartkey.com/mpngs/m/197-1979528_chat-room-apps-logo.png" alt="MDB Logo"
+                    draggable="false" height="40" /></a>
+            <p class="text-black fw-bold">CHAT NOW</p>
+            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto align-items-center">
+    
+                    <li class="nav-item ms-3">
+                        <a class="btn btn-black text-white btn-rounded" style="background-color: black;" href="#!">Login</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a class="btn btn-black text-white btn-rounded" style="background-color: black;"
+                            href="#!">Signout</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a class="btn btn-black text-white btn-rounded" style="background-color: black;" href="#!">Sign
+                            in</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container d-flex justify-content-center align-items-center min-vh-100 gradient-custom ">
 
         <div class="row border rounded-5 p-3 bg-white shadow box-area">
 
@@ -71,16 +101,18 @@
 
         </div>
 
+        
+
     </div>
-    
     <footer class="fixed-bottom">
         <div class="alert alert-success d-none text-center fw-bold" role="alert" id="success-alert">
-
+    
         </div>
         <div class="alert alert-danger d-none text-center fw-bold" role="alert" id="failure-alert">
-
+    
         </div>
     </footer>
+    
     <script src="./signup.js"></script>
 
     <!-- Include Axios -->

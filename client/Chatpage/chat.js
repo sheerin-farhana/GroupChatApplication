@@ -1,84 +1,160 @@
+const token = localStorage.getItem("token");
+const messageInput = document.getElementById("message-input");
+const sendMessageBtn = document.getElementById("send-message-btn");
 
-const sendMessageBtn = document.getElementById('send-message-btn');
-const messageInput = document.getElementById('message-text');
-const msgContainer = document.getElementById('user-message');
-const token = localStorage.getItem('token');
-let messagesArray;
+const messageListContainer = document.getElementById("message-list");
+new SimpleBar(messageListContainer);
 
-sendMessageBtn.addEventListener('click', async (e) => {
-    e.preventDefault();
-    const text = messageInput.value;
-    
+sendMessageBtn.addEventListener("click", async (e) => {
+  e.preventDefault();
+  const text = messageInput.value;
 
-    try {
-        const sentMessage = await axios.post('http://localhost:3000/users/message', {
-            text: text,
-        }, {
-            headers: {
-                'Authorization': 'Bearer ' + token,
-            },
-        }
-        );
-        const message = sentMessage.data.message;
-       
-    }
-    catch (err) {
-        console.log(err);
-        alert("some error ");
-    }
+  try {
+    const sentMessage = await axios.post(
+      "http://localhost:3000/users/message",
+      {
+        text: text,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    const message = sentMessage.data.message;
+  } catch (err) {
+    console.log(err);
+    alert("some error ");
+  }
 
-    messageInput.value = "";
-
+  messageInput.value = "";
 });
-document.addEventListener("DOMContentLoaded", async (e) => {
-    // Assuming you have the token stored in localStorage
-    const token = localStorage.getItem('token');
-    
 
-    // Use setInterval, not setTimeInterval
-    setInterval(async () => {
-        try {
-            const response = await axios.get('http://localhost:3000/users/messages', {
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                },
-            });
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const users = await axios.get("http://localhost:3000/users");
+    const usersArray = users.data.users;
 
-            messagesArray = response.data.messages;
-            console.log(response.data.messages,"messages");
-            
-        } catch (error) {
-            console.error(error);
-        }
-    }, 0);
-
-    console.log(messagesArray);
-
-    messagesArray.messagesArray.forEach(message => {
-        console.log(message);
-        addMessageToUi(message.Text);
+    usersArray.forEach((user) => {
+      adduserstoUi(user.Name, user.Phone);
+      console.log(user);
     });
-    
+
+    const currentUserId = localStorage.getItem("userid");
+    console.log("CURRENT USER ID", currentUserId);
+
+    const lastSavedMessageId = getLastSavedMessageId();
+
+    // Fetch new messages based on the last saved message ID
+    const newMessages = await fetchNewMessages(lastSavedMessageId);
+
+    // Merge new messages with existing messages in local storage
+    mergeMessagesWithLocalStorage(newMessages);
+
+    // Display messages on the frontend
+    displayMessagesFromLocalStorage();
+  } catch (error) {
+    console.error(error);
+  }
 });
 
+function getLastSavedMessageId() {
+  const msgsFromLS = JSON.parse(localStorage.getItem("messages")) || [];
+  return msgsFromLS.length > 0 ? msgsFromLS[msgsFromLS.length - 1].id : 0;
+}
 
-const addMessageToUi = (message) => {
+async function fetchNewMessages(lastSavedMessageId) {
+  const response = await axios.get(
+    `http://localhost:3000/users/messages?lastmessageid=${lastSavedMessageId}`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
 
-    const messageContainer = document.createElement('div');
-    messageContainer.classList.add("message-container");
+  return response.data.messages;
+}
 
-    const userDiv = document.createElement('div');
-    userDiv.classList.add("user-one");
+function mergeMessagesWithLocalStorage(newMessages) {
+  const msgsFromLS = JSON.parse(localStorage.getItem("messages")) || [];
+  const combinedMessages = [...msgsFromLS, ...newMessages];
 
-    const messageParagraph = document.createElement('p');
-    messageParagraph.classList.add("user-message");
-    messageParagraph.textContent = message;
+  // Save only the most recent 10 messages
+  if (combinedMessages.length > 800) {
+    combinedMessages = combinedMessages.slice(-10);
+  }
 
-    userDiv.appendChild(messageParagraph);
+  localStorage.setItem("messages", JSON.stringify(combinedMessages));
+}
 
-    // Append user div to message container
-    messageContainer.appendChild(userDiv);
+function displayMessagesFromLocalStorage() {
+  const msgsFromLS = JSON.parse(localStorage.getItem("messages")) || [];
+  if (msgsFromLS.length > 0) {
+    msgsFromLS.forEach((message) => {
+      console.log(message);
+      addMemberMessageToUi(message.Text, message.username);
+    });
+  } else {
+    console.log("No messages found in local storage");
+    alert("No messages");
+  }
+}
 
-    // Append message container to the body or any other parent element
-    document.body.appendChild(messageContainer);
+function addMemberMessageToUi(message, name) {
+  // Assuming you have a reference to the ul element with id 'message-list'
+  const messageList = document.getElementById("message-list");
+
+  // Create a new li element
+  const newListItem = document.createElement("li");
+  newListItem.classList.add("d-flex", "justify-content-between", "mb-4");
+
+  // Create the inner content structure
+  newListItem.innerHTML = `
+    
+    <div class="card w-100">
+        <div class="card-header d-flex justify-content-between p-3">
+            <p class="fw-bold mb-0">${name}</p>
+            
+        </div>
+        <div class="card-body">
+            <p class="mb-0">
+                ${message}
+            </p>
+        </div>
+    </div>
+`;
+
+  // Append the new li element to the ul
+  messageList.appendChild(newListItem);
+}
+
+function adduserstoUi(name, number) {
+  // Assuming you have a reference to the ul element with id 'user-list'
+  const userList = document.getElementById("user-list");
+
+  // Create a new li element
+  const newListItem = document.createElement("li");
+  newListItem.classList.add("p-2", "border-bottom");
+  newListItem.style.backgroundColor = "#eee";
+
+  // Create the inner content structure
+  newListItem.innerHTML = `
+    <a href="#!" class="d-flex justify-content-between">
+        <div class="d-flex flex-row">
+            <img src="https://www.pngkey.com/png/full/115-1150152_default-profile-picture-avatar-png-green.png"
+                alt="avatar"
+                class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
+                width="60">
+            <div class="pt-1">
+                <p class="fw-bold mb-0">${name}</p>
+                <p>${number}</p>
+            </div>
+        </div>
+        
+    </a>
+`;
+
+  // Append the new li element to the ul
+  userList.appendChild(newListItem);
 }
