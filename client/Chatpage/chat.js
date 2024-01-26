@@ -1,4 +1,5 @@
 const token = localStorage.getItem("token");
+const groupId = localStorage.getItem("selectedGroupId");
 const messageInput = document.getElementById("message-input");
 const sendMessageBtn = document.getElementById("send-message-btn");
 
@@ -11,7 +12,7 @@ sendMessageBtn.addEventListener("click", async (e) => {
 
   try {
     const sentMessage = await axios.post(
-      "http://localhost:3000/users/message",
+      `http://localhost:3000/users/groups/${groupId}/messages`,
       {
         text: text,
       },
@@ -21,7 +22,8 @@ sendMessageBtn.addEventListener("click", async (e) => {
         },
       }
     );
-    const message = sentMessage.data.message;
+    const message = sentMessage.data;
+    addMemberMessageToUi(message.message, message.username);
   } catch (err) {
     console.log(err);
     alert("some error ");
@@ -32,27 +34,45 @@ sendMessageBtn.addEventListener("click", async (e) => {
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const users = await axios.get("http://localhost:3000/users");
-    const usersArray = users.data.users;
+    const groupUsers = await axios.get(
+      `http://localhost:3000/users/groups/${groupId}/members`
+    );
 
-    usersArray.forEach((user) => {
+    const groupUsersArray = groupUsers.data.groupMembers;
+
+    groupUsersArray.forEach((user) => {
       adduserstoUi(user.Name, user.Phone);
       console.log(user);
     });
 
-    const currentUserId = localStorage.getItem("userid");
-    console.log("CURRENT USER ID", currentUserId);
+    const groupMessages = await axios.get(
+      `http://localhost:3000/users/groups/${groupId}/messages`,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
 
-    const lastSavedMessageId = getLastSavedMessageId();
+    const groupMessagesArray = groupMessages.data.messages;
 
-    // Fetch new messages based on the last saved message ID
-    const newMessages = await fetchNewMessages(lastSavedMessageId);
+    groupMessagesArray.forEach((message) => {
+      addMemberMessageToUi(message.Text, message.username);
+    });
 
-    // Merge new messages with existing messages in local storage
-    mergeMessagesWithLocalStorage(newMessages);
+    // const currentUserId = localStorage.getItem("userid");
+    // console.log("CURRENT USER ID", currentUserId);
 
-    // Display messages on the frontend
-    displayMessagesFromLocalStorage();
+    // const lastSavedMessageId = getLastSavedMessageId();
+
+    // // Fetch new messages based on the last saved message ID
+    // const newMessages = await fetchNewMessages(lastSavedMessageId);
+
+    // // Merge new messages with existing messages in local storage
+    // mergeMessagesWithLocalStorage(newMessages);
+
+    // // Display messages on the frontend
+    // displayMessagesFromLocalStorage();
   } catch (error) {
     console.error(error);
   }

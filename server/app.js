@@ -5,6 +5,7 @@ dotenv.config();
 
 const { User } = require("./models/User");
 const { Message } = require("./models/Message");
+const { Group, GroupMembership } = require("./models/Group");
 
 const sequelize = require("./Utils/database");
 const userRoutes = require("./routes/user");
@@ -22,8 +23,15 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/users", userRoutes);
 
-Message.belongsTo(User, { foreignKey: "userId" });
-User.hasMany(Message, { foreignKey: "userId" });
+// Schema relationships
+User.belongsToMany(Group, { through: GroupMembership });
+Group.belongsToMany(User, { through: GroupMembership });
+
+User.hasMany(Message);
+Message.belongsTo(User);
+
+Group.hasMany(Message);
+Message.belongsTo(Group);
 
 sequelize
   .sync()

@@ -41,10 +41,13 @@ loginBtn.addEventListener("click", async (e) => {
         loginData
       );
 
+      const userId = userDetails.data.userId;
+      localStorage.setItem("userId", userId);
+
       if (userDetails.data.success) {
         successalert(userDetails.data.message);
         localStorage.setItem("token", userDetails.data.token);
-        window.location.href = "../Chatpage/chat.html";
+        window.location.href = "../ChatHomepage/home.html";
       } else {
         failurealert(userDetails.data.message);
         // alert();
