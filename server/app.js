@@ -15,7 +15,6 @@ const app = express();
 app.use(
   cors({
     origin: "*",
-    methods: ["GET", "POST"],
   })
 );
 app.use(express.json());
@@ -32,6 +31,8 @@ Message.belongsTo(User);
 
 Group.hasMany(Message);
 Message.belongsTo(Group);
+
+Group.belongsTo(User, { foreignKey: "adminUserId" });
 
 sequelize
   .sync()

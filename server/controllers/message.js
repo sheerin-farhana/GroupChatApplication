@@ -51,7 +51,7 @@ const getAllMessages = async (req, res, next) => {
 
 const getAllGroupMessages = async (req, res, next) => {
   const userId = req.user.id;
-  const groupId = req.params.groupId; // assuming groupId is passed in the URL
+  const groupId = req.params.groupId;
 
   try {
     // Check if the user belongs to the specified group

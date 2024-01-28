@@ -78,48 +78,48 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-function getLastSavedMessageId() {
-  const msgsFromLS = JSON.parse(localStorage.getItem("messages")) || [];
-  return msgsFromLS.length > 0 ? msgsFromLS[msgsFromLS.length - 1].id : 0;
-}
+// function getLastSavedMessageId() {
+//   const msgsFromLS = JSON.parse(localStorage.getItem("messages")) || [];
+//   return msgsFromLS.length > 0 ? msgsFromLS[msgsFromLS.length - 1].id : 0;
+// }
 
-async function fetchNewMessages(lastSavedMessageId) {
-  const response = await axios.get(
-    `http://localhost:3000/users/messages?lastmessageid=${lastSavedMessageId}`,
-    {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    }
-  );
+// async function fetchNewMessages(lastSavedMessageId) {
+//   const response = await axios.get(
+//     `http://localhost:3000/users/group/${groupId}/messages?lastmessageid=${lastSavedMessageId}`,
+//     {
+//       headers: {
+//         Authorization: "Bearer " + token,
+//       },
+//     }
+//   );
 
-  return response.data.messages;
-}
+//   return response.data.messages;
+// }
 
-function mergeMessagesWithLocalStorage(newMessages) {
-  const msgsFromLS = JSON.parse(localStorage.getItem("messages")) || [];
-  const combinedMessages = [...msgsFromLS, ...newMessages];
+// function mergeMessagesWithLocalStorage(newMessages) {
+//   const msgsFromLS = JSON.parse(localStorage.getItem("messages")) || [];
+//   const combinedMessages = [...msgsFromLS, ...newMessages];
 
-  // Save only the most recent 10 messages
-  if (combinedMessages.length > 800) {
-    combinedMessages = combinedMessages.slice(-10);
-  }
+//   // Save only the most recent 10 messages
+//   if (combinedMessages.length > 800) {
+//     combinedMessages = combinedMessages.slice(-10);
+//   }
 
-  localStorage.setItem("messages", JSON.stringify(combinedMessages));
-}
+//   localStorage.setItem("messages", JSON.stringify(combinedMessages));
+// }
 
-function displayMessagesFromLocalStorage() {
-  const msgsFromLS = JSON.parse(localStorage.getItem("messages")) || [];
-  if (msgsFromLS.length > 0) {
-    msgsFromLS.forEach((message) => {
-      console.log(message);
-      addMemberMessageToUi(message.Text, message.username);
-    });
-  } else {
-    console.log("No messages found in local storage");
-    alert("No messages");
-  }
-}
+// function displayMessagesFromLocalStorage() {
+//   const msgsFromLS = JSON.parse(localStorage.getItem("messages")) || [];
+//   if (msgsFromLS.length > 0) {
+//     msgsFromLS.forEach((message) => {
+//       console.log(message);
+//       addMemberMessageToUi(message.Text, message.username);
+//     });
+//   } else {
+//     console.log("No messages found in local storage");
+//     alert("No messages");
+//   }
+// }
 
 function addMemberMessageToUi(message, name) {
   // Assuming you have a reference to the ul element with id 'message-list'

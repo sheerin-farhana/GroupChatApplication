@@ -13,6 +13,8 @@ const {
   getUserGroups,
   postGroup,
   getGroupMembers,
+  updateGroup,
+  deleteGroup,
 } = require("../controllers/group");
 
 route.post("/signup", signup);
@@ -26,4 +28,9 @@ route.post("/groups", authenticate, postGroup);
 route.get("/groups", authenticate, getUserGroups);
 route.get("/groups/:groupId/messages", authenticate, getAllGroupMessages);
 route.get("/groups/:groupId/members", getGroupMembers);
+
+route.put("/groups/:groupId", authenticate, updateGroup);
+
+route.post("/groups/:groupId", deleteGroup);
+
 module.exports = route;
