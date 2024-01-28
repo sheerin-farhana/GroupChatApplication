@@ -21,6 +21,33 @@ function failurealert(msg) {
   }, 2000);
 }
 
+forgotPasswordBtn.addEventListener("click", async () => {
+  const forgotPasswordModal = new bootstrap.Modal(
+    document.getElementById("forgot-password-modal")
+  );
+  forgotPasswordModal.show();
+
+  const emailId = document.getElementById("forgot_pass_email");
+  const saveChangesBtn = document.getElementById("save-changes");
+
+  saveChangesBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    // modal.hide();
+    try {
+      const emailData = await axios.post(
+        "http://localhost:3000/password/forgotPassword",
+        { email: emailId.value }
+      );
+      console.log(emailData); //
+      successalert("Reset password email sent");
+
+      // alert("reset password email Sent");
+    } catch (error) {
+      failurealert("something went wrong");
+    }
+  });
+});
+
 loginBtn.addEventListener("click", async (e) => {
   e.preventDefault();
   const email = emailInput.value;

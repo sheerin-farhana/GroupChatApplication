@@ -31,6 +31,6 @@ route.get("/groups/:groupId/members", getGroupMembers);
 
 route.put("/groups/:groupId", authenticate, updateGroup);
 
-route.post("/groups/:groupId", deleteGroup);
+route.delete("/groups/:groupId", deleteGroup);
 
 module.exports = route;

@@ -6,9 +6,11 @@ dotenv.config();
 const { User } = require("./models/User");
 const { Message } = require("./models/Message");
 const { Group, GroupMembership } = require("./models/Group");
+const { ForgotPassword } = require("./models/ForgotPassword");
 
 const sequelize = require("./Utils/database");
 const userRoutes = require("./routes/user");
+const passwordroutes = require("./routes/password");
 
 const app = express();
 
@@ -21,10 +23,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/users", userRoutes);
+app.use("/password", passwordroutes);
 
 // Schema relationships
 User.belongsToMany(Group, { through: GroupMembership });
 Group.belongsToMany(User, { through: GroupMembership });
+
+User.hasMany(ForgotPassword);
+ForgotPassword.belongsTo(User);
 
 User.hasMany(Message);
 Message.belongsTo(User);

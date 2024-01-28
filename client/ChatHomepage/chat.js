@@ -204,7 +204,7 @@ async function updateGroupInDatabase(groupId, updatedGroupName, updatedUsers) {
     alert("Group updated");
   } catch (error) {
     console.error(error);
-    alert("Error updating the group");
+    alert("group could not be updated");
   }
 }
 
@@ -261,12 +261,7 @@ async function handleUpdateButtonClick(groupId) {
     });
   } catch (err) {
     console.error(err);
-    if (
-      err.success == false &&
-      err.msg == "Unauthorized. Only group admins can update the group."
-    ) {
-      alert("Only admins can update group");
-    }
+
     alert("Error fetching group details");
   }
 }
