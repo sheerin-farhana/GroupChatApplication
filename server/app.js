@@ -2,7 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const dotenv = require("dotenv");
+const http = require("http");
 dotenv.config();
+
+const { Server } = require("socket.io");
 
 const { User } = require("./models/User");
 const { Message } = require("./models/Message");
@@ -13,7 +16,19 @@ const sequelize = require("./Utils/database");
 const userRoutes = require("./routes/user");
 const passwordroutes = require("./routes/password");
 
+const websocketService = require("./services/websocket");
+
 const app = express();
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
+
+io.on("connection", websocketService);
 
 app.use(
   cors({
@@ -46,9 +61,9 @@ Message.belongsTo(Group);
 Group.belongsTo(User, { foreignKey: "adminUserId" });
 
 sequelize
-  .sync({ force: true })
+  .sync()
   .then((result) => {
-    app.listen(3000, () => {
+    server.listen(3000, () => {
       console.log("app is running");
     });
   })

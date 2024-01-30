@@ -6,6 +6,12 @@ const sendMessageBtn = document.getElementById("send-message-btn");
 const messageListContainer = document.getElementById("message-list");
 new SimpleBar(messageListContainer);
 
+const socket = io(window.location.origin);
+
+socket.on("group-message", (groupId) => {
+  showGroupmessages(groupId);
+});
+
 sendMessageBtn.addEventListener("click", async (e) => {
   e.preventDefault();
   const text = messageInput.value;
@@ -23,6 +29,7 @@ sendMessageBtn.addEventListener("click", async (e) => {
       }
     );
     const message = sentMessage.data;
+    socket.emit("new-group-message", groupId);
     addMemberMessageToUi(message.message, message.username);
   } catch (err) {
     console.log(err);
@@ -33,6 +40,16 @@ sendMessageBtn.addEventListener("click", async (e) => {
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
+  var navbarToggler = document.querySelector(".navbar-toggler");
+  var navbarCollapse = document.querySelector("#navbarSupportedContent");
+
+  navbarToggler.addEventListener("click", function () {
+    navbarCollapse.classList.toggle("show");
+  });
+  showGroupmessages(groupId);
+});
+
+async function showGroupmessages(groupid) {
   try {
     const groupUsers = await axios.get(
       `http://localhost:3000/users/groups/${groupId}/members`
@@ -59,24 +76,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     groupMessagesArray.forEach((message) => {
       addMemberMessageToUi(message.Text, message.username);
     });
-
-    // const currentUserId = localStorage.getItem("userid");
-    // console.log("CURRENT USER ID", currentUserId);
-
-    // const lastSavedMessageId = getLastSavedMessageId();
-
-    // // Fetch new messages based on the last saved message ID
-    // const newMessages = await fetchNewMessages(lastSavedMessageId);
-
-    // // Merge new messages with existing messages in local storage
-    // mergeMessagesWithLocalStorage(newMessages);
-
-    // // Display messages on the frontend
-    // displayMessagesFromLocalStorage();
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.log(err);
   }
-});
+}
 
 // function getLastSavedMessageId() {
 //   const msgsFromLS = JSON.parse(localStorage.getItem("messages")) || [];
