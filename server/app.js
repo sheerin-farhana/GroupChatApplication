@@ -46,7 +46,7 @@ Message.belongsTo(Group);
 Group.belongsTo(User, { foreignKey: "adminUserId" });
 
 sequelize
-  .sync()
+  .sync({ force: true })
   .then((result) => {
     app.listen(3000, () => {
       console.log("app is running");
