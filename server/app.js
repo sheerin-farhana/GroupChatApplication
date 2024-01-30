@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -24,6 +25,10 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/users", userRoutes);
 app.use("/password", passwordroutes);
+
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, `public/${req.url}`));
+});
 
 // Schema relationships
 User.belongsToMany(Group, { through: GroupMembership });

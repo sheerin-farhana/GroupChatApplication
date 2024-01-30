@@ -45,7 +45,7 @@ const login = async (req, res, next) => {
   if (isStringValid(email) || isStringValid(password)) {
     return res
       .status(400)
-      .json({ success: false, message: "Email or password is missing" });
+      .json({ success: false, msg: "Email or password is missing" });
   }
 
   try {
@@ -59,27 +59,23 @@ const login = async (req, res, next) => {
       const isMatch = await bcrypt.compare(password, user.Password);
 
       if (isMatch) {
-        res
-          .status(200)
-          .json({
-            success: true,
-            message: "User login successful",
-            token: generateAccessToken(user.id, user.Name),
-            userId: user.id,
-          });
+        res.status(200).json({
+          success: true,
+          message: "User login successful",
+          token: generateAccessToken(user.id, user.Name),
+          userId: user.id,
+        });
       } else {
         res
           .status(400)
-          .json({ success: false, message: "Password  does not match" });
+          .json({ success: false, msg: "Password  does not match" });
       }
     } else {
-      res
-        .status(404)
-        .json({ success: false, message: "Emaild does not exist" });
+      res.status(404).json({ success: false, msg: "Emaild does not exist" });
     }
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ msg: "Internal server error" });
   }
 };
 

@@ -34,12 +34,10 @@ const forgotpassword = async (req, res) => {
         .send(msg)
         .then((response) => {
           console.log("Email sent");
-          return res
-            .status(response[0].statusCode)
-            .json({
-              message: "Link to reset password sent to your mail ",
-              success: true,
-            });
+          return res.status(response[0].statusCode).json({
+            msg: "Link to reset password sent to your mail ",
+            success: true,
+          });
         })
         .catch((error) => {
           console.error(error);
@@ -50,7 +48,7 @@ const forgotpassword = async (req, res) => {
     }
   } catch (err) {
     console.error(err);
-    return res.json({ message: err, success: false });
+    return res.json({ msg: err, success: false });
   }
 };
 
@@ -113,7 +111,7 @@ const updatepassword = async (req, res) => {
 
             res
               .status(201)
-              .json({ message: "Successfully updated the new password" });
+              .json({ msg: "Successfully updated the new password" });
           });
         });
       } else {
@@ -122,9 +120,10 @@ const updatepassword = async (req, res) => {
           .json({ error: "No user exists", success: false });
       }
     } else {
-      return res
-        .status(404)
-        .json({ error: "Reset request not found", success: false });
+      return res.status(404).json({
+        success: false,
+        msg: "Reset request not found",
+      });
     }
   } catch (error) {
     console.log(error);

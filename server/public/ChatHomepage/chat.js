@@ -203,8 +203,10 @@ async function updateGroupInDatabase(groupId, updatedGroupName, updatedUsers) {
     );
     alert("Group updated");
   } catch (error) {
-    console.error(error);
-    alert("group could not be updated");
+    if (error.response) {
+      alert(error.response.data.msg);
+      console.log(error);
+    }
   }
 }
 
@@ -260,7 +262,7 @@ async function handleUpdateButtonClick(groupId) {
       location.reload();
     });
   } catch (err) {
-    console.error(err);
+    console.log(err);
 
     alert("Error fetching group details");
   }

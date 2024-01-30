@@ -43,7 +43,10 @@ forgotPasswordBtn.addEventListener("click", async () => {
 
       // alert("reset password email Sent");
     } catch (error) {
-      failurealert("something went wrong");
+      if (error.response) {
+        failurealert(error.response.data.msg);
+        console.log(error);
+      }
     }
   });
 });
@@ -80,8 +83,10 @@ loginBtn.addEventListener("click", async (e) => {
         // alert();
       }
     } catch (err) {
-      console.log(err);
-      failurealert("An error occurred. Please try again.");
+      if (err.response) {
+        failurealert(err.response.data.msg);
+        console.log(err);
+      }
     }
   }
 });
