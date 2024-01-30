@@ -12,7 +12,7 @@ sendMessageBtn.addEventListener("click", async (e) => {
 
   try {
     const sentMessage = await axios.post(
-      `http://localhost:3000/users/groups/${groupId}/messages`,
+      `http://13.201.42.84:3000/users/groups/${groupId}/messages`,
       {
         text: text,
       },
@@ -35,7 +35,7 @@ sendMessageBtn.addEventListener("click", async (e) => {
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const groupUsers = await axios.get(
-      `http://localhost:3000/users/groups/${groupId}/members`
+      `http://13.201.42.84:3000/users/groups/${groupId}/members`
     );
 
     const groupUsersArray = groupUsers.data.groupMembers;
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const groupMessages = await axios.get(
-      `http://localhost:3000/users/groups/${groupId}/messages`,
+      `http://13.201.42.84:3000/users/groups/${groupId}/messages`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // async function fetchNewMessages(lastSavedMessageId) {
 //   const response = await axios.get(
-//     `http://localhost:3000/users/group/${groupId}/messages?lastmessageid=${lastSavedMessageId}`,
+//     `http://13.201.42.84:3000/users/group/${groupId}/messages?lastmessageid=${lastSavedMessageId}`,
 //     {
 //       headers: {
 //         Authorization: "Bearer " + token,
