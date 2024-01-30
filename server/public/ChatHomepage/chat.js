@@ -14,6 +14,13 @@ document.addEventListener("DOMContentLoaded", function () {
       );
       myModal.show();
     });
+
+  var navbarToggler = document.querySelector(".navbar-toggler");
+  var navbarCollapse = document.querySelector("#navbarSupportedContent");
+
+  navbarToggler.addEventListener("click", function () {
+    navbarCollapse.classList.toggle("show");
+  });
 });
 
 const createGroupBtn = document.getElementById("create-grp-btn");

@@ -33,6 +33,13 @@ sendMessageBtn.addEventListener("click", async (e) => {
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
+  var navbarToggler = document.querySelector(".navbar-toggler");
+  var navbarCollapse = document.querySelector("#navbarSupportedContent");
+
+  navbarToggler.addEventListener("click", function () {
+    navbarCollapse.classList.toggle("show");
+  });
+
   try {
     const groupUsers = await axios.get(
       `http://13.201.42.84:3000/users/groups/${groupId}/members`

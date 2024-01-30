@@ -93,3 +93,12 @@ function validateForm() {
 
   return true; // If all validations pass
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  var navbarToggler = document.querySelector(".navbar-toggler");
+  var navbarCollapse = document.querySelector("#navbarSupportedContent");
+
+  navbarToggler.addEventListener("click", function () {
+    navbarCollapse.classList.toggle("show");
+  });
+});
