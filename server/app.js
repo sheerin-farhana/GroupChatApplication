@@ -4,6 +4,7 @@ const path = require("path");
 const dotenv = require("dotenv");
 const http = require("http");
 dotenv.config();
+const cronService = require("./services/cronService");
 
 const { Server } = require("socket.io");
 
@@ -61,6 +62,8 @@ Group.hasMany(Message);
 Message.belongsTo(Group);
 
 Group.belongsTo(User, { foreignKey: "adminUserId" });
+
+cronService.archiveOldMessages();
 
 sequelize
   .sync()
