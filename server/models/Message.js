@@ -12,6 +12,9 @@ const Message = sequelize.define("Messages", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  imageUrl: {
+    type: Sequelize.STRING, // For image URLs or keys
+  },
   username: {
     type: Sequelize.STRING,
     allowNull: false,

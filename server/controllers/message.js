@@ -1,6 +1,13 @@
 const { GroupMembership } = require("../models/Group");
 const { Message } = require("../models/Message");
 const { Op } = require("sequelize");
+const sharp = require("sharp");
+const { Server } = require("socket.io");
+const server = require("../app");
+
+const crypto = require("crypto");
+
+const { uploadToS3 } = require("../services/awsServices");
 
 const postMessage = async (req, res, next) => {
   const { text } = req.body;
@@ -111,10 +118,62 @@ const postGroupMessage = async (req, res, next) => {
       msg: "Group message added",
       message: groupMessage.Text,
       username: req.user.Name,
+      imageUrl: groupMessage.imageUrl,
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({ success: false, msg: "Internal server error" });
+  }
+};
+
+const randomImageName = (bytes = 32) => {
+  return crypto.randomBytes(bytes).toString("hex");
+};
+
+const sendImageController = async (req, res) => {
+  try {
+    console.log(req.file);
+    const groupId = req.params.groupId;
+    const fileBuffer = req.file.buffer;
+    const fileName = randomImageName();
+    const contentType = req.file.mimetype;
+
+    const resizedfileBuffer = await sharp(fileBuffer)
+      .resize({ height: 350, width: 350, fit: "contain" })
+      .toBuffer();
+
+    const imageUrl = await uploadToS3(resizedfileBuffer, fileName, contentType);
+
+    const groupMessage = await Message.create({
+      Text: "",
+      UserId: req.user.id,
+      GroupId: groupId,
+      username: req.user.Name,
+      imageUrl: imageUrl,
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: "fileuploaded",
+      imageUrl: imageUrl,
+      username: req.user.Name,
+    });
+    const io = new Server(server, {
+      cors: {
+        origin: "*",
+      },
+    });
+    io.to(groupId).emit("new-image", {
+      imageUrl: imageUrl,
+      username: req.user.Name,
+    });
+  } catch (error) {
+    console.error("Error in sendImageController:", error);
+    res.status(500).json({
+      success: false,
+      msg: "Internal Server Error",
+      error: error.message,
+    });
   }
 };
 
@@ -123,4 +182,5 @@ module.exports = {
   getAllMessages,
   getAllGroupMessages,
   postGroupMessage,
+  sendImageController,
 };

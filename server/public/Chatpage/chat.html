@@ -71,20 +71,22 @@
                     <ul class="list-unstyled" id="message-list" data-simplebar>
                         
                     </ul>
-    
                 </div>
-
-                
                     <div class="form-outline fixed-bottom d-flex justify-content-between">
-                        <textarea class="form-control me-2" rows="4" placeholder="Type your message here" id="message-input" required></textarea>
+                        <textarea class="form-control me-2" rows="4" placeholder="Type your message here" id="message-input"
+                            required></textarea>
                         <button type="button" class="btn btn-info btn-rounded" id="send-message-btn">Send</button>
                     </div>
-
                     
-                
-    
+                    <div class="form-outline fixed-bottom d-flex justify-content-between mt-3">
+                        <form action="#" method="POST" enctype="multipart/form-data" class="d-flex align-items-center">
+                            <label for="fileInput" class="me-2"><i class="bi bi-paperclip"></i></label>
+                            <input type="file" id="fileInput" name="fileInput" accept="image/*, video/*" class="form-control" style="flex: 1;">
+                            <button type="button" class="btn btn-info btn-rounded ms-2" id="send-image-btn">Send file</button>
+                        </form>
+
+                    </div>
             </div>
-    
         </div>
     </section>
     

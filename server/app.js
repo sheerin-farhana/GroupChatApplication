@@ -30,6 +30,8 @@ const io = new Server(server, {
 
 io.on("connection", websocketService);
 
+module.exports = server;
+
 app.use(
   cors({
     origin: "*",

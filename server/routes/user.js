@@ -1,6 +1,11 @@
 const express = require("express");
 const route = express.Router();
 
+const multer = require("multer");
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 const { signup, login, getAllUsers } = require("../controllers/user");
 const { authenticate } = require("../middleware/auth");
 const {
@@ -8,6 +13,7 @@ const {
   getAllMessages,
   getAllGroupMessages,
   postGroupMessage,
+  sendImageController,
 } = require("../controllers/message");
 const {
   getUserGroups,
@@ -32,5 +38,12 @@ route.get("/groups/:groupId/members", getGroupMembers);
 route.put("/groups/:groupId", authenticate, updateGroup);
 
 route.delete("/groups/:groupId", deleteGroup);
+
+route.post(
+  "/image/:groupId",
+  authenticate,
+  upload.single("fileInput"),
+  sendImageController
+);
 
 module.exports = route;
